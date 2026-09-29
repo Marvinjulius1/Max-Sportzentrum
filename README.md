@@ -1,53 +1,47 @@
-# max – Sport- und Gesundheitszentrum · Concept Site
+# max – Sport- und Gesundheitszentrum · Website
 
-Editorial one-pager. Next.js 16 (App Router) · React 19 · TypeScript · Tailwind v4 ·
-GSAP + ScrollTrigger · Lenis · three.js (plain).
+Reines HTML, CSS und JavaScript – kein Framework, kein Build-Schritt.
+Einfach den kompletten Ordner auf den Webspace hochladen (z. B. per FTP zu
+Strato, IONOS, All-Inkl, Netlify …). `index.html` ist die Startseite.
 
-```bash
-npm install
-npm run dev      # http://localhost:3000
-npm run build && npm start
-npm run lint
+```
+index.html        alle Texte + Seitenstruktur
+css/style.css     Gestaltung (Farben ganz oben als Variablen)
+js/               Animationen, Scrollen, WebGL/3D
+bilder/           Logo, Equipment-Cutouts, Story-Fotos, HDRI
+fonts/            Archivo + Newsreader (selbst gehostet)
+vendor/           GSAP, ScrollTrigger, Lenis, three.js (lokal, keine CDNs)
 ```
 
-## Inhalte austauschen
+## Inhalte ändern
 
-Alle studio-spezifischen Fakten stehen in **`src/lib/content.ts`**
-(Platzhalter sind mit `PLATZHALTER` markiert – Gründungsjahr, Preise, Flächen,
-Kurszahlen, Trainer, E-Mail, Pressezitat). Bilder liegen in **`/public`**:
+- **Texte, Preise, Zahlen, Öffnungszeiten, Links:** direkt in `index.html`.
+  Die Zähler im Bereich „Studio in Zahlen“ haben ihren Zielwert in
+  `data-num="…"`.
+- **Bilder:** Datei in `bilder/` unter gleichem Namen ersetzen.
+  Equipment-Cutouts müssen PNG mit transparentem Hintergrund sein.
+  Pfade und Achse (`y` aufrecht, `x` liegend, `disc` Scheibe) für die
+  3D-Objekte stehen im Block `site-config` oben in `index.html`.
+- **Kontaktformular:** im `<form action="#">` die Adresse deines
+  Formular-Dienstes eintragen (Formspree, Netlify Forms, PHP-Mailer …).
+  Solange `action="#"` ist, zeigt das Formular nur eine Danke-Meldung.
 
-| Datei | Zweck |
-|---|---|
-| `public/logo/max-logo.svg`, `max-mark.svg`, `max-logo-inverse.svg` | Logo (vektorisiert), Bildmarke, Variante für dunklen Grund |
-| `public/equipment/hero.png` | Hero-Objekt – echtes Cutout, transparenter Hintergrund, aufrecht |
-| `public/equipment/{kettlebell,dumbbell,plate,medball}.png` | Cutouts für die 3D-Objekte |
-| `public/story/placeholder-story-0X-*.jpg` | Story-Fotos (werden graustufig gezeigt) |
-| `public/hdri/studio_small_08_1k.hdr` | Poly Haven HDRI (CC0) |
+Platzhalter-Bilder und Lizenzen: `bilder/CREDITS.md`.
 
-Neue Cutouts einfach unter gleichem Namen ablegen. Achsen-Hinweis in
-`assets.equipment` (content.ts): `y` = aufrecht rotationssymmetrisch
-(Kettlebell, Ball), `x` = liegend (Kurzhantel, Achse horizontal im Foto),
-`disc` = Scheibe (Foto zeigt die Stirnseite). Aus der Silhouette wird ein
-Drehkörper (Lathe) gebaut, das Foto wird 360° darauf projiziert und daraus
-eine Roughness/Metalness-Map abgeleitet.
+## Lokal ansehen
 
-Herkunft und Lizenzen der Platzhalter: `public/CREDITS.md`.
-
-## Aufbau
-
-- `src/components/hero/` – Hero: eine WebGL-Pass-Komposition (Papier/Nacht),
-  Navier–Stokes-Fluid (`gl/FluidSim.ts`, 10 % Auflösung, BFECC, 4 Jacobi,
-  Dissipation 0.96) als harte Maske mit Teal-Rim, Flut beim Scrollen.
-- `src/components/gl/Stage.ts` – ein gemeinsamer WebGL-Kontext für alle
-  Produkt-Views (Scissor pro DOM-Element), HDRI via PMREM, ACES 1.15.
-- `src/components/sections/` – Bereiche, Methode, Geschichte, Stimmen, Studio, Footer
-  (jeweils eigener ScrollTrigger-Pin, meldet Fortschritt an die Nav).
-- Farben ausschließlich aus dem Logo + Weiß/Schwarz-Mischungen: `src/app/globals.css`.
-- `prefers-reduced-motion`: kein Preloader, kein Smooth-Scroll, keine Pins;
-  statische Bilder statt 3D.
-
-## Offline-Datei (Doppelklick, ohne Server)
+Die Seite nutzt JavaScript-Module und WebGL-Texturen, deshalb braucht sie
+einen (beliebigen) Webserver – Doppelklick auf `index.html` reicht nicht.
 
 ```bash
-npm run build:offline   # -> max-sportzentrum.html (alles eingebettet, ~8 MB)
+python3 -m http.server 8000     # dann http://localhost:8000
+# oder
+npx serve .
 ```
+
+## Performance
+
+- Hero und 3D-Objekte rendern nur, solange sie sichtbar sind.
+- Die Hero-Auflösung passt sich automatisch an, wenn Frames zu lange dauern.
+- Smooth-Scroll (Lenis) nur für Mausrad; auf Touch-Geräten natives Scrollen.
+- `prefers-reduced-motion`: statische Seite ohne Pins, Preloader und 3D.
