@@ -99,3 +99,12 @@ export function scrollToTarget(target) {
 
 /* ---------- config from index.html ---------- */
 export const config = JSON.parse(document.getElementById("site-config").textContent);
+
+/**
+ * Opened by double-click (file://) the browser blocks image/HDR files for
+ * WebGL. js/embedded-assets.js carries copies of those files; use them then.
+ */
+export function resolveAsset(src) {
+  if (location.protocol === "file:" && window.__EMBED && window.__EMBED[src]) return window.__EMBED[src];
+  return src;
+}

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { HDRLoader } from "three";
-import { config, gsap, trackLoad } from "../runtime.js";
+import { config, gsap, resolveAsset, trackLoad } from "../runtime.js";
 class StageImpl {
   renderer = null;
   canvas = null;
@@ -46,7 +46,7 @@ class StageImpl {
     const r = this.renderer;
     if (!r) return this.envPromise = Promise.resolve(null);
     this.envPromise = trackLoad(
-      new HDRLoader().loadAsync(config.hdri).then((hdr) => {
+      new HDRLoader().loadAsync(resolveAsset(config.hdri)).then((hdr) => {
         const pmrem = new THREE.PMREMGenerator(r);
         const env = pmrem.fromEquirectangular(hdr).texture;
         hdr.dispose();

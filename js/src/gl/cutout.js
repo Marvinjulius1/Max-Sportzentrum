@@ -1,3 +1,4 @@
+import { resolveAsset } from "../runtime.js";
 const cache = /* @__PURE__ */ new Map();
 function loadCutout(src, maxSize = 1400) {
   const hit = cache.get(src);
@@ -28,7 +29,7 @@ function loadCutout(src, maxSize = 1400) {
       resolve({ src, img, width: w, height: h, data, bbox: { x0, y0, x1: x1 + 1, y1: y1 + 1 } });
     };
     img.onerror = reject;
-    img.src = src;
+    img.src = resolveAsset(src);
   });
   cache.set(src, p);
   return p;

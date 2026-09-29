@@ -8,10 +8,8 @@
   <meta name="description" content="Das Studio, das du kennst. Klare Räume, ehrliches Eisen, Trainer, die deinen Namen sagen.">
   <link rel="icon" href="bilder/logo/max-mark.svg" type="image/svg+xml">
 
-  <link rel="preload" href="fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/newsreader-var.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/newsreader-italic-var.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="bilder/equipment/hero.png" as="image">
+  <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/style.css">
 
   <!--
@@ -36,13 +34,12 @@
   }
   </script>
 
-  <script type="importmap">
-  { "imports": { "three": "./vendor/three.min.js" } }
-  </script>
   <script src="vendor/gsap.min.js" defer></script>
   <script src="vendor/ScrollTrigger.min.js" defer></script>
   <script src="vendor/lenis.min.js" defer></script>
-  <script type="module" src="js/main.js"></script>
+  <!-- nur beim Öffnen per Doppelklick (file://): eingebettete Kopien der 3D-Bilder laden -->
+  <script>if (location.protocol === "file:") document.write('<script src="js/embedded-assets.js"><\/script>');</script>
+  <script src="js/app.js" defer></script>
 </head>
 
 <body>

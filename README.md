@@ -7,7 +7,7 @@ Strato, IONOS, All-Inkl, Netlify …). `index.html` ist die Startseite.
 ```
 index.html        alle Texte + Seitenstruktur
 css/style.css     Gestaltung (Farben ganz oben als Variablen)
-js/               Animationen, Scrollen, WebGL/3D
+js/app.js         alle Skripte (gebündelt aus js/src/)
 bilder/           Logo, Equipment-Cutouts, Story-Fotos, HDRI
 fonts/            Archivo + Newsreader (selbst gehostet)
 vendor/           GSAP, ScrollTrigger, Lenis, three.js (lokal, keine CDNs)
@@ -28,15 +28,24 @@ vendor/           GSAP, ScrollTrigger, Lenis, three.js (lokal, keine CDNs)
 
 Platzhalter-Bilder und Lizenzen: `bilder/CREDITS.md`.
 
-## Lokal ansehen
+## Ansehen
 
-Die Seite nutzt JavaScript-Module und WebGL-Texturen, deshalb braucht sie
-einen (beliebigen) Webserver – Doppelklick auf `index.html` reicht nicht.
+**Doppelklick auf `index.html`** – fertig. Kein Server, kein Internet nötig.
+
+(Beim Öffnen per Doppelklick nutzt die Seite für die 3D-Objekte die
+eingebetteten Kopien aus `js/embedded-assets.js`. Auf dem Webspace werden
+direkt die Dateien aus `bilder/` verwendet.)
+
+## Für Entwickler: JavaScript ändern
+
+Der lesbare Quellcode liegt in `js/src/`. Die Seite lädt die gebündelte
+Datei `js/app.js`. Nach Änderungen in `js/src/` – oder wenn du
+Equipment-Bilder austauschst und weiterhin per Doppelklick testen willst –
+einmal neu bauen:
 
 ```bash
-python3 -m http.server 8000     # dann http://localhost:8000
-# oder
-npx serve .
+npm i -g esbuild      # einmalig
+node tools/build.mjs  # erzeugt js/app.js, js/embedded-assets.js, css/fonts.css
 ```
 
 ## Performance
