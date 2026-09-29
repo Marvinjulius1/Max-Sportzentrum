@@ -20,7 +20,7 @@ export function initMethod() {
   ring.innerHTML = svg;
   panels.forEach((p) => p.querySelector(".bar b").style.setProperty("--v", p.dataset.bar));
 
-  if (runtime.reduced) {
+  if (runtime.static) {
     ScrollTrigger.create({ trigger: el, start: "top top", end: "bottom top", onUpdate: (s) => reportSection(2, s.progress) });
     navZone(el, "light");
     return;

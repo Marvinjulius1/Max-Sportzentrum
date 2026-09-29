@@ -11,14 +11,32 @@ export function initAreas() {
   const n = panels.length;
   const state = { a: 0, spin: 0 };
 
-  if (runtime.reduced) {
+  if (runtime.static) {
     ScrollTrigger.create({ trigger: el, start: "top top", end: "bottom top", onUpdate: (s) => reportSection(1, s.progress) });
     navZone(el, "light");
     return;
   }
 
+  // the one 3D view sits on the active area's empty stage cell
+  const view = el.querySelector('[data-view="areas"]');
+  let current = 0;
+  const placeView = () => {
+    const stage = panels[current].querySelector(".area__stage");
+    const s = el.getBoundingClientRect();
+    const r = stage.getBoundingClientRect();
+    Object.assign(view.style, {
+      left: `${r.left - s.left}px`,
+      top: `${r.top - s.top}px`,
+      width: `${r.width}px`,
+      height: `${r.height}px`,
+    });
+  };
+  placeView();
+  window.addEventListener("resize", placeView);
+  ScrollTrigger.addEventListener("refresh", placeView);
+
   if (runtime.webgl) {
-    createView(el.querySelector('[data-view="areas"]'), panels.map((p) => p.dataset.equipment), {
+    createView(view, panels.map((p) => p.dataset.equipment), {
       fov: 26,
       distance: 3.1,
       setup: ({ scene }) => {
@@ -44,11 +62,11 @@ export function initAreas() {
     });
   }
 
-  let current = 0;
   const setActive = (i) => {
     if (i === current) return;
     const prev = current;
     current = i;
+    placeView();
     const dir = i > prev ? 1 : -1;
     gsap.to(panels[prev], { autoAlpha: 0, duration: 0.35, ease: "power2.in" });
     gsap.to(panels[prev].querySelectorAll("[data-rise]"), { yPercent: -40 * dir, duration: 0.35, ease: "power2.in" });

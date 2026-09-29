@@ -9,6 +9,8 @@ ScrollTrigger.config({ ignoreMobileResize: true });
 export const runtime = {
   lenis: null,
   reduced: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  /** no pinned sections: reduced motion, or a screen too low for full-height scenes */
+  static: window.matchMedia("(prefers-reduced-motion: reduce)").matches || window.innerHeight < 500,
   webgl: true,
   ready: false,
   /** smoothed scroll velocity in px per frame */

@@ -14,7 +14,7 @@ export function initStory() {
   // split numerals into digits for the roll
   years.forEach((y) => (y.innerHTML = [...y.textContent.trim()].map((d) => `<span>${d}</span>`).join("")));
 
-  if (runtime.reduced) {
+  if (runtime.static) {
     ScrollTrigger.create({ trigger: el, start: "top top", end: "bottom top", onUpdate: (s) => reportSection(3, s.progress) });
     navZone(el, "dark");
     return;

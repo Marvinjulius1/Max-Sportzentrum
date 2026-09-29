@@ -28,25 +28,31 @@ export function initVoices() {
     inner.className = "marquee__inner";
     row.append(inner);
     inner.append(track, track.cloneNode(true), track.cloneNode(true));
-    return { inner, dir: +row.dataset.marquee, x: 0 };
+    return { inner, dir: +row.dataset.marquee, x: 0, w: 1 };
   });
+  // measure once (and on resize) – never read layout inside the frame loop
+  const measure = () => rows.forEach((row) => (row.w = row.inner.scrollWidth / 3 || 1));
+  measure();
+  window.addEventListener("resize", measure);
+  document.fonts?.ready.then(measure);
 
-  if (runtime.reduced) {
+  if (runtime.static) {
     ScrollTrigger.create({ trigger: el, start: "top top", end: "bottom top", onUpdate: (s) => reportSection(4, s.progress) });
     navZone(el, "light");
     return;
   }
 
   let sign = 1;
+  let onScreen = false;
+  new IntersectionObserver(([e]) => (onScreen = e.isIntersecting)).observe(el);
   gsap.ticker.add((_t, dtMs) => {
-    const r = el.getBoundingClientRect();
-    if (r.bottom < 0 || r.top > innerHeight) return;
+    if (!onScreen) return;
     const v = runtime.velocity;
     if (Math.abs(v) > 0.5) sign = Math.sign(v);
     const speed = (0.6 + Math.min(Math.abs(v) * 0.45, 22)) * sign * (dtMs / 16.67);
     const skew = Math.max(-8, Math.min(8, v * 0.25));
     rows.forEach((row) => {
-      const w = row.inner.scrollWidth / 3;
+      const w = row.w;
       row.x = (((row.x + speed * row.dir * (row.dir < 0 ? 0.85 : 1)) % w) + w) % w;
       row.inner.style.transform = `translate3d(${-row.x}px,0,0) skewX(${-skew}deg)`;
     });

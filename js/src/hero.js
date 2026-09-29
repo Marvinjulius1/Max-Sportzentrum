@@ -38,7 +38,7 @@ export function initHero() {
   window.addEventListener("pointermove", (e) => engine?.setPointer(e.clientX, e.clientY), { passive: true });
   window.addEventListener("resize", () => engine?.resize());
 
-  if (runtime.reduced) {
+  if (runtime.static) {
     ScrollTrigger.create({ trigger: el, start: "top top", end: "bottom top", onUpdate: (s) => reportSection(0, s.progress) });
     return;
   }

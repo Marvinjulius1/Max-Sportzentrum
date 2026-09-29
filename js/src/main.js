@@ -14,6 +14,7 @@ import { initFooter } from "./sections/footer.js";
 
 const html = document.documentElement;
 if (runtime.reduced) html.classList.add("reduced");
+if (runtime.static) html.classList.add("static");
 try {
   const c = document.createElement("canvas");
   runtime.webgl = !!c.getContext("webgl2");

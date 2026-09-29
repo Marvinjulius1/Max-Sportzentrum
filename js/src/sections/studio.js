@@ -9,16 +9,18 @@ export function initStudio() {
   const cells = [...el.querySelectorAll("[data-fact]")];
   const offers = [...el.querySelectorAll("[data-offer]")];
 
-  // studio + footer count as the last nav section
-  ScrollTrigger.create({
-    trigger: el,
-    start: "top top",
-    endTrigger: document.getElementById("kontakt"),
-    end: "bottom bottom",
-    onUpdate: (s) => reportSection(5, Math.max(0.001, s.progress)),
-  });
+  // studio + footer count as the last nav section (created after the pin below)
+  const trackProgress = () =>
+    ScrollTrigger.create({
+      trigger: el,
+      start: "top top",
+      endTrigger: document.getElementById("kontakt"),
+      end: "bottom bottom",
+      onUpdate: (s) => reportSection(5, Math.max(0.001, s.progress)),
+    });
 
-  if (runtime.reduced) {
+  if (runtime.static) {
+    trackProgress();
     navZone(el, "light");
     return;
   }
@@ -68,6 +70,7 @@ export function initStudio() {
     tl.to(c, { v: to, duration: 0.6, ease: "power1.out", onUpdate: () => (n.textContent = String(Math.round(c.v))) }, i * 0.06);
   });
   tl.to({}, { duration: 0.2 });
+  trackProgress();
   gsap.from(cells, { y: 60, opacity: 0, stagger: 0.08, duration: 1.1, ease: "expo.out", scrollTrigger: { trigger: facts, start: "top 55%" } });
   gsap.from(offers, { y: 80, opacity: 0, stagger: 0.1, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: el.querySelector(".offers"), start: "top 80%" } });
   navZone(el, "light");
