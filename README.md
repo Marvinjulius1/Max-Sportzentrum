@@ -45,3 +45,9 @@ Herkunft und Lizenzen der Platzhalter: `public/CREDITS.md`.
 - Farben ausschließlich aus dem Logo + Weiß/Schwarz-Mischungen: `src/app/globals.css`.
 - `prefers-reduced-motion`: kein Preloader, kein Smooth-Scroll, keine Pins;
   statische Bilder statt 3D.
+
+## Offline-Datei (Doppelklick, ohne Server)
+
+```bash
+npm run build:offline   # -> max-sportzentrum.html (alles eingebettet, ~8 MB)
+```
